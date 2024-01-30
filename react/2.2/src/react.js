@@ -1,3 +1,10 @@
+export class Component {
+  constructor(props) {
+    // 함수컴포넌트의 함수의 역할을 한다고 생각하기
+    this.props = props;
+  }
+}
+
 export function createDOM(node) {
   if (typeof node === "string") {
     return document.createTextNode(node); // 문자열 dom을 만들어서 리턴
@@ -16,16 +23,25 @@ export function createDOM(node) {
   return element;
 }
 
+function makeProps(props, children) {
+  return {
+    ...props,
+    children: children.length === 1 ? children[0] : children,
+  };
+}
+
 export function createElement(tag, props, ...children) {
   props = props || {};
   if (typeof tag === "function") {
-    if (children.length > 0) {
-      return tag({
-        ...props,
-        children: children.length === 1 ? children[0] : children,
-      });
+    if (tag.prototype instanceof Component) {
+      const instance = new tag(makeProps(props, children));
+      return instance.render();
     } else {
-      return tag(props);
+      if (children.length > 0) {
+        return tag(makeProps(props, children));
+      } else {
+        return tag(props);
+      }
     }
   } else {
     return {
@@ -39,3 +55,5 @@ export function createElement(tag, props, ...children) {
 export function render(vdom, container) {
   container.appendChild(createDOM(vdom));
 }
+
+// 클래스 컴포넌트는 함수 컴포넌트와 다르게 상태를 가질 수 있다. => 함수 컴포넌트도 상태를 가질 수 있게 하기 위해 hooks가 나옴
