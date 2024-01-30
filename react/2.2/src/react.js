@@ -1,6 +1,5 @@
 export class Component {
   constructor(props) {
-    // 함수컴포넌트의 함수의 역할을 한다고 생각하기
     this.props = props;
   }
 }
@@ -56,4 +55,13 @@ export function render(vdom, container) {
   container.appendChild(createDOM(vdom));
 }
 
-// 클래스 컴포넌트는 함수 컴포넌트와 다르게 상태를 가질 수 있다. => 함수 컴포넌트도 상태를 가질 수 있게 하기 위해 hooks가 나옴
+export const render = function () {
+  let prevDom = null;
+  return function (vdom, container) {
+    if (prevDom == null) prevDom = vdom;
+
+    // prevDom 이 있다면 diff를 통해 바뀐 부분만 업데이트
+
+    container.appendChild(createDOM(vdom));
+  };
+};

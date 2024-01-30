@@ -2,9 +2,7 @@
 import { render, createElement, Component } from "./react";
 
 class Title extends Component {
-  // Component 클래스를 상속받아야함.
   render() {
-    // jsx를 반환하는 render 메소드를 구현해야함.
     return <h1>{this.props.children}</h1>;
   }
 }
