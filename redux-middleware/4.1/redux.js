@@ -9,7 +9,6 @@ export function createStore(reducer, middlewares = []) {
 
   function dispatch(action) {
     state = reducer(state, action);
-    console.log("action => ", action);
     handlers.forEach((handler) => handler());
   }
 

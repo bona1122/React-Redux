@@ -2,27 +2,9 @@ import { createStore } from "./redux.js";
 import * as Actions from "./actions.js";
 import reducer from "./reducer.js";
 import { SET_COUNTER, ASYNC_INCREASE_COUNTER } from "./action-type.js";
+import { logger } from "./logger.js";
 
-const middleware1 = (store) => next => (action) => {
-  console.log("m1 => ", action);
-  next(action); // 다음 미들웨어로 흐름을 넘겨줌
-};
-const middleware2 = (store) => (next) => (action) => {
-  console.log("m2 => ", action); 
-  if (action.type === SET_COUNTER) {
-    action.payload = 100;
-  }
-  next(action);
-};
-const middleware3 = (store) => (next) => (action) => {
-  console.log("m3 => ", action);
-  if (action.type === ASYNC_INCREASE_COUNTER) {
-    setTimeout(() => {
-      next(Actions.increase()); // 다음 타자는 reducer가 될 것.
-    }, 1000);
-  } else next(action); // 관심없으면 그대로 흐름 보내줌
-};
-const store = createStore(reducer, [middleware1, middleware2, middleware3]);
+const store = createStore(reducer, [logger]);
 
 const counterDisplay = document.querySelector("#counter");
 const btnIncrease = document.querySelector("#btn-increase");
